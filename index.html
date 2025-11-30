@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK Labour Intelligence Platform - Demo for Group D</title>
+    
+    <!-- ADD THESE LINES FOR CUSTOM APP ICON -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚜️</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%238B4513'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>⚜️</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="HK Labour Demo">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Playfair+Display:wght@400;500;600;700&family=Source+Serif+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            font-family: 'Crimson Text', 'Times New Roman', serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            min-height: 100vh;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #2C2C2C;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        .header {
+            background: rgba(255,255,255,0.92);
+            padding: 28px 25px;
+            border-radius: 2px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid #D4AF37;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: relative;
+            border-top: 4px solid #8B4513;
+        }
+        .header:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #D4AF37, #8B4513, #D4AF37);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            color: #2C2C2C;
+            letter-spacing: 0.5px;
+        }
+        .demo-subtitle {
+            margin: 8px 0 0 0;
+            font-size: 1em;
+            font-weight: 600;
+            color: #8B4513;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+        .header p {
+            margin: 12px 0 0 0;
+            color: #666;
+            font-size: 0.95em;
+            font-weight: 400;
+            font-style: italic;
+        }
+        .crest {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.85);
+            padding: 20px 15px;
+            border-radius: 1px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #E5E5E5;
+            border-top: 3px solid #8B4513;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .stat-number {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: #8B4513;
+            display: block;
+            letter-spacing: 0.5px;
+            font-family: 'Playfair Display', serif;
+        }
+        .stat-label {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .card {
+            background: rgba(255,255,255,0.92);
+            padding: 28px;
+            border-radius: 1px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #E5E5E5;
+            border-left: 4px solid #8B4513;
+            position: relative;
+        }
+        .card:before {
+            content: "";
+            position: absolute;
+            left: -4px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #8B4513, #D4AF37, #8B4513);
+        }
+        .card h3 {
+            margin: 0 0 25px 0;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2C2C2C;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid #E5E5E5;
+            padding-bottom: 12px;
+        }
+        .vacancy-item {
+            padding: 20px;
+            margin: 15px 0;
+            background: linear-gradient(135deg, #fafafa, #f5f5f5);
+            border-radius: 1px;
+            border-left: 3px solid #8B4513;
+            transition: all 0.3s ease;
+            border: 1px solid #E5E5E5;
+            cursor: pointer;
+            position: relative;
+        }
+        .vacancy-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left-color: #D4AF37;
+        }
+        .vacancy-item:before {
+            content: "↗";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8B4513;
+            font-size: 1.2em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .vacancy-item:hover:before {
+            opacity: 1;
+        }
+        .vacancy-item strong {
+            font-weight: 600;
+            color: #2C2C2C;
+            display: block;
+            margin-bottom: 6px;
+            font-family: 'Source Serif Pro', serif;
+        }
+        .vacancy-item small {
+            color: #666;
+            font-weight: 500;
+        }
+        .applicant-info {
+            color: #555;
+            font-size: 0.85em;
+            margin-top: 8px;
+            display: block;
+            font-style: italic;
+        }
+        .btn {
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: #FFF;
+            padding: 18px 28px;
+            border: none;
+            border-radius: 1px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+            border: 1px solid #8B4513;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);
+            background: linear-gradient(135deg, #A0522D, #8B4513);
+        }
+        .tab-btn {
+            background: #f8f8f8;
+            padding: 16px 18px;
+            border: none;
+            border-radius: 1px;
+            margin: 4px;
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+            border: 1px solid #E5E5E5;
+            font-family: 'Source Serif Pro', serif;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: #FFF;
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+            border: 1px solid #8B4513;
+        }
+        .tabs-container {
+            display: flex;
+            gap: 8px;
+            margin: 25px 0;
+        }
+        .chart-container {
+            height: 240px;
+            position: relative;
+            margin-top: 15px;
+        }
+        .sector-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #8B4513;
+            color: #FFF;
+            border-radius: 1px;
+            font-size: 0.75em;
+            font-weight: 500;
+            margin-right: 8px;
+            font-family: 'Source Serif Pro', serif;
+        }
+        .salary {
+            color: #8B4513;
+            font-weight: 600;
+        }
+        .detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: #FFF;
+            border-radius: 1px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 40px auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 1px solid #D4AF37;
+            border-top: 4px solid #8B4513;
+            font-family: 'Crimson Text', serif;
+        }
+        .close-btn {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #8B4513;
+            font-family: 'Playfair Display', serif;
+        }
+        .install-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: #FFF;
+            border: none;
+            border-radius: 1px;
+            padding: 14px 22px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);
+            z-index: 100;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+            border: 1px solid #D4AF37;
+        }
+        .gold-accent {
+            color: #D4AF37;
+        }
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="crest">⚜️</div>
+            <h1>Hong Kong Labour Intelligence Platform</h1>
+            <div class="demo-subtitle">Demo for Group D</div>
+            <p>Established 2025 • Transparency Through Tradition • Excellence in Governance</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number" id="totalApps">4,327</span>
+                <span class="stat-label">Applications YTD</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">68%</span>
+                <span class="stat-label">Approval Rate</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">2,841</span>
+                <span class="stat-label">Locals Trained</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Labour Market Intelligence</h3>
+            <div class="vacancy-item" onclick="showDetails('construction')">
+                <strong>Senior Construction Supervisor</strong>
+                <small><span class="sector-tag">🏗️ Construction</span> • <span class="salary">HK$38,500/month</span></small>
+                <span class="applicant-info">3/12 local applicants met requirements • Vacancy open 42 days</span>
+            </div>
+            <div class="vacancy-item" onclick="showDetails('physiotherapist')">
+                <strong>Senior Physiotherapist (Musculoskeletal)</strong>
+                <small><span class="sector-tag">🏥 Healthcare</span> • <span class="salary">HK$52,000/month</span></small>
+                <span class="applicant-info">5/15 local applicants met requirements • Vacancy open 67 days</span>
+            </div>
+            <div class="vacancy-item" onclick="showDetails('lawyer')">
+                <strong>Corporate Lawyer (International Finance)</strong>
+                <small><span class="sector-tag">⚖️ Legal</span> • <span class="salary">HK$78,000/month</span></small>
+                <span class="applicant-info">2/8 local applicants met requirements • Vacancy open 34 days</span>
+            </div>
+            <div class="vacancy-item" onclick="showDetails('doctor')">
+                <strong>Consultant Physician (Cardiology)</strong>
+                <small><span class="sector-tag">👨‍⚕️ Medical</span> • <span class="salary">HK$125,000/month</span></small>
+                <span class="applicant-info">1/6 local applicants met requirements • Vacancy open 89 days</span>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <button class="btn" onclick="showDetails('analytics')">
+                View Comprehensive Analytics
+            </button>
+        </div>
+
+        <div class="card">
+            <h3>Strategic Investment Dashboard</h3>
+            <div class="tabs-container">
+                <button class="tab-btn active" onclick="switchTab('funding')">Funding Allocation</button>
+                <button class="tab-btn" onclick="switchTab('training')">Training Outcomes</button>
+                <button class="tab-btn" onclick="switchTab('results')">Employment Results</button>
+            </div>
+            
+            <div id="funding" class="tab-content">
+                <p style="margin:0 0 15px 0; color:#666; font-size:0.9em; font-style: italic;">Levy Fund Distribution FY2025 (Total: HK$184.5M)</p>
+                <div class="chart-container">
+                    <canvas id="fundingChart"></canvas>
+                </div>
+            </div>
+            <div id="training" class="tab-content" style="display:none;">
+                <p style="margin:0 0 15px 0; color:#666; font-size:0.9em; font-style: italic;">Local Workforce Development Initiatives</p>
+                <div class="chart-container">
+                    <canvas id="trainingChart"></canvas>
+                </div>
+            </div>
+            <div id="results" class="tab-content" style="display:none;">
+                <p style="margin:0 0 15px 0; color:#666; font-size:0.9em; font-style: italic;">6-Month Post-Training Employment Success</p>
+                <div class="chart-container">
+                    <canvas id="resultsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailModal" class="detail-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <div id="modalContent">
+                <!-- Content will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <button class="install-btn" onclick="installApp()">⚜️ Install Application</button>
+
+    <script>
+        // Initialize Charts with updated sectors
+        setTimeout(() => {
+            // Funding Chart - Updated for new professions
+            new Chart(document.getElementById('fundingChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Construction Academy', 'Medical Training', 'Legal Education', 'Healthcare Programs', 'Administration'],
+                    datasets: [{
+                        data: [35, 30, 20, 10, 5],
+                        backgroundColor: ['#8B4513', '#A0522D', '#D4AF37', '#CD7F32', '#B8860B']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'Crimson Text', size: 12 },
+                                padding: 15
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Training Chart - Updated sectors
+            new Chart(document.getElementById('trainingChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Construction', 'Medical', 'Legal', 'Healthcare'],
+                    datasets: [{
+                        label: 'Workers Trained',
+                        data: [1240, 765, 320, 516],
+                        backgroundColor: '#8B4513',
+                        borderRadius: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Results Chart - Updated sectors
+            new Chart(document.getElementById('resultsChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Construction', 'Medical', 'Legal', 'Healthcare'],
+                    datasets: [{
+                        label: 'Employment Rate %',
+                        data: [92, 88, 82, 85],
+                        backgroundColor: '#A0522D',
+                        borderRadius: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }, 500);
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+            document.getElementById(tabName).style.display = 'block';
+        }
+
+        function showDetails(type) {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContent');
+            
+            const details = {
+                construction: `
+                    <h3 style="margin-top:0;color:#2C2C2C; font-family: 'Playfair Display';">Construction Supervisor Analysis</h3>
+                    <div style="background:#fafafa; padding:20px; border-radius:1px; margin:20px 0; border-left: 3px solid #8B4513;">
+                        <h4 style="margin:0 0 12px 0;color:#555; font-family: 'Source Serif Pro';">Hiring Process Transparency</h4>
+                        <p><strong>Local Applicants:</strong> 14 total applications</p>
+                        <p><strong>Met Requirements:</strong> 3 candidates</p>
+                        <p><strong>Rejection Reasons:</strong><br>
+                        • 8 insufficient experience with high-rise projects<br>
+                        • 3 failed technical assessment<br>
+                        • 0 declined offer</p>
+                    </div>
+                    <p><strong>Market Analysis:</strong> This role requires 8+ years in projects over 40 floors. Only 12% of local applicants met the technical specifications.</p>
+                    <p><strong>Training Initiative:</strong> HK$12.8M allocated to Advanced Construction Management programme at PolyU.</p>
+                `,
+                physiotherapist: `
+                    <h3 style="margin-top:0;color:#2C2C2C; font-family: 'Playfair Display';">Senior Physiotherapist Specialist</h3>
+                    <div style="background:#fafafa; padding:20px; border-radius:1px; margin:20px 0; border-left: 3px solid #8B4513;">
+                        <h4 style="margin:0 0 12px 0;color:#555; font-family: 'Source Serif Pro';">Hiring Process Transparency</h4>
+                        <p><strong>Local Applicants:</strong> 18 total applications</p>
+                        <p><strong>Met Requirements:</strong> 5 candidates</p>
+                        <p><strong>Rejection Reasons:</strong><br>
+                        • 9 insufficient musculoskeletal specialization<br>
+                        • 4 lacked international certification<br>
+                        • 0 declined offer</p>
+                    </div>
+                    <p><strong>Market Analysis:</strong> Critical shortage of physiotherapists with advanced musculoskeletal training. Only 28% of applicants had required specialization.</p>
+                    <p><strong>Training Initiative:</strong> HK$18.2M allocated to Advanced Physiotherapy programme with HKU, focusing on sports and musculoskeletal medicine.</p>
+                    <p><strong>Impact:</strong> Addresses 45% vacancy rate in public hospital physiotherapy departments.</p>
+                `,
+                lawyer: `
+                    <h3 style="margin-top:0;color:#2C2C2C; font-family: 'Playfair Display';">Corporate Finance Lawyer</h3>
+                    <div style="background:#fafafa; padding:20px; border-radius:1px; margin:20px 0; border-left: 3px solid #8B4513;">
+                        <h4 style="margin:0 0 12px 0;color:#555; font-family: 'Source Serif Pro';">Hiring Process Transparency</h4>
+                        <p><strong>Local Applicants:</strong> 12 total applications</p>
+                        <p><strong>Met Requirements:</strong> 2 candidates</p>
+                        <p><strong>Rejection Reasons:</strong><br>
+                        • 7 insufficient international finance experience<br>
+                        • 3 failed cross-border transaction assessment<br>
+                        • 0 declined offer</p>
+                    </div>
+                    <p><strong>Market Analysis:</strong> High demand for lawyers with international finance expertise. Role requires 5+ years in cross-border M&A transactions.</p>
+                    <p><strong>Training Initiative:</strong> HK$14.5M for International Legal Studies programme at CUHK, focusing on cross-border financial regulations.</p>
+                    <p><strong>Impact:</strong> Supports Hong Kong's position as international financial center amid growing regulatory complexity.</p>
+                `,
+                doctor: `
+                    <h3 style="margin-top:0;color:#2C2C2C; font-family: 'Playfair Display';">Consultant Cardiologist</h3>
+                    <div style="background:#fafafa; padding:20px; border-radius:1px; margin:20px 0; border-left: 3px solid #8B4513;">
+                        <h4 style="margin:0 0 12px 0;color:#555; font-family: 'Source Serif Pro';">Hiring Process Transparency</h4>
+                        <p><strong>Local Applicants:</strong> 8 total applications</p>
+                        <p><strong>Met Requirements:</strong> 1 candidate</p>
+                        <p><strong>Rejection Reasons:</strong><br>
+                        • 5 insufficient interventional cardiology experience<br>
+                        • 2 failed specialist board certification<br>
+                        • 0 declined offer</p>
+                    </div>
+                    <p><strong>Market Analysis:</strong> Severe shortage of consultant-level cardiologists. Only 12.5% of applicants met the 8+ years interventional experience requirement.</p>
+                    <p><strong>Training Initiative:</strong> HK$22.8M allocated to Cardiology Fellowship programme with HK Medical Council, including overseas training components.</p>
+                    <p><strong>Impact:</strong> Addresses critical 35% vacancy rate in public hospital cardiology departments affecting cardiac care services.</p>
+                `,
+                analytics: `
+                    <h3 style="margin-top:0;color:#2C2C2C; font-family: 'Playfair Display';">Comprehensive Labour Market Analytics</h3>
+                    <div style="background:#fafafa; padding:20px; border-radius:1px; margin:20px 0; border-left: 3px solid #8B4513;">
+                        <h4 style="margin:0 0 12px 0;color:#555; font-family: 'Source Serif Pro';">Key Performance Indicators</h4>
+                        <p><strong>Transparency Score:</strong> 94% - All SLS applications publicly auditable</p>
+                        <p><strong>Levy ROI:</strong> 3.2x - For every HK$1 collected, HK$3.2 returned in local wage growth</p>
+                        <p><strong>Local Upskilling:</strong> 2,841 professionals trained across 4 high-demand sectors</p>
+                        <p><strong>Success Rate:</strong> 87% average employment rate for programme graduates</p>
+                        <p><strong>Medical Impact:</strong> 765 doctors trained, reducing specialist vacancies by 28%</p>
+                    </div>
+                    <p><strong>Strategic Impact:</strong> This platform has reduced public concerns about foreign workers by 42% through radical transparency and demonstrable local investment.</p>
+                    <p style="margin-top: 20px; padding: 15px; background: #f8f8f8; border-left: 4px solid #D4AF37;">
+                        <strong>Demo Note:</strong> This is a demonstration platform for Group D's project on foreign worker policies in Hong Kong. Data shown is simulated for educational purposes.
+                    </p>
+                `
+            };
+
+            content.innerHTML = details[type] || details['analytics'];
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function installApp() {
+            if (window.navigator.standalone) {
+                alert('📱 Application is already installed on your device.');
+            } else if (window.deferredPrompt) {
+                window.deferredPrompt.prompt();
+                window.deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    window.deferredPrompt = null;
+                });
+            } else {
+                alert('To install this application:\n\n1. Tap the Share button 📱\n2. Select "Add to Home Screen"\n3. Launch like a native application');
+            }
+        }
+
+        let count = 4327;
+        setInterval(() => {
+            count += Math.floor(Math.random() * 2);
+            document.getElementById('totalApps').textContent = count.toLocaleString();
+        }, 2000);
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window.deferredPrompt = e;
+        });
+    </script>
+</body>
+</html>
